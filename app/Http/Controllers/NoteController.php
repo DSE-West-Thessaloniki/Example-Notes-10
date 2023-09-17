@@ -23,7 +23,7 @@ class NoteController extends Controller
         $notes = Note::when($filter, function ($query) use ($filter) {
             $query->where('title', 'like', "%{$filter}%")
                 ->orWhere('content', 'like', "%{$filter}%");
-        })->get();
+        })->paginate(10);
 
         return Inertia::render('Note/Index', [
             'notes' => $notes,
