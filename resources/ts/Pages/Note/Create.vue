@@ -12,10 +12,12 @@
                             <div class="mb-3">
                                 <label for="title" class="block">Τίτλος:</label>
                                 <input id="title" class="w-full" v-model="form.title" required/>
+                                <div v-if="form.errors.title" v-text="form.errors.title" class="text-red-600 text-sm"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="content" class="block">Περιεχόμενο:</label>
                                 <textarea id="content" class="w-full" v-model="form.content" required/>
+                                <div v-if="form.errors.content" v-text="form.errors.content" class="text-red-600 text-sm"></div>
                             </div>
                             <div class="flex justify-between">
                                 <Link class="bg-red-600 rounded px-2 py-1" :href="route('note.index')" as="button">Άκυρο</Link>
