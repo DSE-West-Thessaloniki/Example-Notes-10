@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Note;
 use App\Http\Requests\StoreNoteRequest;
 use App\Http\Requests\UpdateNoteRequest;
+use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 
 class NoteController extends Controller
@@ -14,10 +15,19 @@ class NoteController extends Controller
      */
     public function index()
     {
-        $notes = Note::all();
+        $filter = Request::input('filter');
+        if (!is_string($filter)) {
+            $filter = '';
+        }
+
+        $notes = Note::when($filter, function ($query) use ($filter) {
+            $query->where('title', 'like', "%{$filter}%")
+                ->orWhere('content', 'like', "%{$filter}%");
+        })->get();
 
         return Inertia::render('Note/Index', [
             'notes' => $notes,
+            'filters' => ['filter' => $filter],
         ]);
     }
 
