@@ -20,8 +20,8 @@
                                 <div v-if="form.errors.content" v-text="form.errors.content" class="text-red-600 text-sm"></div>
                             </div>
                             <div class="flex justify-between">
-                                <Link class="bg-red-600 rounded px-2 py-1" :href="route('note.index')" as="button">Άκυρο</Link>
-                                <button class="bg-blue-500 rounded px-2 py-1" type="submit">Αποθήκευση</button>
+                                <Link class="rounded px-2 py-1" :class="form.processing ? 'bg-gray-400' : 'bg-red-600'" :href="route('note.index')" as="button" :disabled="form.processing">Άκυρο</Link>
+                                <button class="rounded px-2 py-1" :class="form.processing ? 'bg-gray-400' : 'bg-blue-500'" type="submit" :disabled="form.processing">Αποθήκευση</button>
                             </div>
                         </form>
                     </div>
