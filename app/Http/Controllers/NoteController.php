@@ -52,7 +52,9 @@ class NoteController extends Controller
      */
     public function edit(Note $note)
     {
-        //
+        return Inertia::render('Note/Edit', [
+            "note" => $note
+        ]);
     }
 
     /**
@@ -60,7 +62,10 @@ class NoteController extends Controller
      */
     public function update(UpdateNoteRequest $request, Note $note)
     {
-        //
+        $note->fill($request->safe()->only('title', 'content'));
+        $note->save();
+
+        return to_route('note.index');
     }
 
     /**
