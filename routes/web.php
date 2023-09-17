@@ -35,4 +35,4 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::resource('/note', NoteController::class);
+Route::resource('/note', NoteController::class)->except(['show']);
