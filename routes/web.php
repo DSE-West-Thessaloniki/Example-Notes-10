@@ -36,3 +36,4 @@ Route::middleware([
 });
 
 Route::resource('/note', NoteController::class)->except(['show']);
+Route::post('/note/{note}/copy', [NoteController::class, 'copy'])->name('note.copy');

@@ -77,4 +77,13 @@ class NoteController extends Controller
 
         return to_route('note.index');
     }
+
+    public function copy(Note $note)
+    {
+        $new_note = $note->replicate();
+        $new_note->title = $note->title . ' - Αντίγραφο';
+        $new_note->save();
+
+        return to_route('note.index');
+    }
 }
