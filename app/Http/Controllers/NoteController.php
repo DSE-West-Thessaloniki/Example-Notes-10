@@ -10,6 +10,11 @@ use Inertia\Inertia;
 
 class NoteController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Note::class, 'note');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -20,10 +25,14 @@ class NoteController extends Controller
             $filter = '';
         }
 
-        $notes = Note::when($filter, function ($query) use ($filter) {
-            $query->where('title', 'like', "%{$filter}%")
-                ->orWhere('content', 'like', "%{$filter}%");
-        })->paginate(10);
+        $notes = Note::where('user_id', auth()->user()->id)
+            ->when($filter, function ($query) use ($filter) {
+                $query->where(function($query) use ($filter) {
+                    $query->where('title', 'like', "%{$filter}%")
+                        ->orWhere('content', 'like', "%{$filter}%");
+                });
+            })
+            ->paginate(10);
 
         return Inertia::render('Note/Index', [
             'notes' => $notes,
@@ -44,7 +53,11 @@ class NoteController extends Controller
      */
     public function store(StoreNoteRequest $request)
     {
-        Note::create($request->validated());
+        Note::create(
+            $request->safe()
+                ->merge(['user_id' => auth()->user()->id])
+                ->only('user_id', 'title', 'content')
+        );
 
         return to_route('note.index');
     }
@@ -90,6 +103,9 @@ class NoteController extends Controller
 
     public function copy(Note $note)
     {
+        $this->authorize('view', $note);
+        $this->authorize('create', Note::class);
+
         $new_note = $note->replicate();
         $new_note->title = $note->title . ' - Αντίγραφο';
         $new_note->save();
