@@ -11,12 +11,12 @@ declare namespace App.Models {
         content: string;
         created_at: string | null;
         updated_at: string | null;
-        user_id: number;
+        user_id: string;
         user?: App.Models.User | null;
     }
 
     export interface User {
-        id: number;
+        id: string;
         username: string;
         name: string;
         email: string;
